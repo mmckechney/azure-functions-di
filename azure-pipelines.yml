@@ -4,6 +4,7 @@ resources:
       type: github
       name: igordemjanov/azure-pipelines-build
       ref: 'refs/heads/master'
+      endpoint: 'igordemjanov'
 
 trigger:
   branches:
