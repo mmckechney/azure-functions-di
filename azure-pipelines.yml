@@ -1,0 +1,30 @@
+resources:
+  repositories:
+    - repository: builds
+      type: github
+      name: igordemjanov/azure-pipelines-build
+      ref: 'refs/heads/master'
+
+trigger:
+  branches:
+    include:
+    - master
+    - feature/*
+    - bug/*
+
+stages:
+
+- stage: Build
+  displayName: Build
+  
+  jobs:
+
+  # Build Azure Functions Project
+  - template: dot-net-core.yml@builds
+    parameters:
+      name: 'Build_Azure_Functions'
+      display_name: 'Build Azure Functions'
+      pool:
+        name: 'Hosted Windows 2019 with VS2019
+      project_title: 'Azure.Functions.DI'
+      artifact_name: 'Functions'
