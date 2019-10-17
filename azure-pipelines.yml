@@ -25,6 +25,6 @@ stages:
       name: 'Build_Azure_Functions'
       display_name: 'Build Azure Functions'
       pool:
-        name: 'Hosted Windows 2019 with VS2019
+        name: 'Hosted Windows 2019 with VS2019'
       project_title: 'Azure.Functions.DI'
       artifact_name: 'Functions'
