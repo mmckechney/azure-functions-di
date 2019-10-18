@@ -5,6 +5,11 @@ resources:
       name: igordemjanov/azure-pipelines-build
       ref: 'refs/heads/master'
       endpoint: 'igordemjanov'
+    - repository: releases
+      type: github
+      name: igordemjanov/azure-pipelines-release
+      ref: 'refs/heads/master'
+      endpoint: 'igordemjanov'
 
 trigger:
   branches:
@@ -13,6 +18,11 @@ trigger:
     - feature/*
     - bug/*
 
+variables:
+  pool_name: 'Hosted Windows 2019 with VS2019'
+  project_title: 'Azure.Functions.DI'
+  artifact_name: 'Functions'
+
 stages:
 
 - stage: Build
@@ -20,12 +30,33 @@ stages:
   
   jobs:
 
-  # Build Azure Functions Project
+  # Build Functions
   - template: dot-net-core.yml@builds
     parameters:
-      name: 'Build_Azure_Functions'
-      display_name: 'Build Azure Functions'
+      name: 'Build_Functions'
+      display_name: 'Build Functions'
       pool:
-        name: 'Hosted Windows 2019 with VS2019'
-      project_title: 'Azure.Functions.DI'
-      artifact_name: 'Functions'
+        name: $(pool_name)
+      project_title: $(project_title)
+      artifact_name: $(artifact_name)
+
+- stage: Deploy_PA_Azure
+  displayName: 'ProActive Azure'
+  dependsOn: 'Build'  
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+  jobs:
+
+  # Deploy Functions
+  - template: azure-app-service.yml@releases
+    parameters:
+      name: 'Deploy_Functions'
+      display_name: 'Deploy Functions'
+      pool:
+        name: $(pool_name)
+      project_title: $(project_title)
+      environment: 'PA Azure'
+      azure_service_connection: 'igor-demjanov-proactive-azure'
+      app_name: 'azure-functions-di-fa'
+      app_type: 'functionApp'
+      artifact_name: $(artifact_name)
