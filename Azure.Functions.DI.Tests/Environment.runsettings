@@ -1,4 +1,5 @@
 ﻿<RunSettings>
   <TestRunParameters>
+    <Parameter name="AZURE_FUNCTIONS_ENVIRONMENT" value="Development" />
   </TestRunParameters>
 </RunSettings>
