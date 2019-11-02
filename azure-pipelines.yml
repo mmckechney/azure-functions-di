@@ -19,7 +19,6 @@ trigger:
     - bug/*
 
 variables:
-  pool_name: 'Hosted Windows 2019 with VS2019'
   project_title: 'Azure.Functions.DI'
   artifact_name: 'Functions'
 
@@ -35,8 +34,6 @@ stages:
     parameters:
       name: 'Build_Functions'
       display_name: 'Build Functions'
-      pool:
-        name: $(pool_name)
       project_title: $(project_title)
       artifact_name: $(artifact_name)
 
@@ -52,8 +49,6 @@ stages:
     parameters:
       name: 'Deploy_Functions'
       display_name: 'Deploy Functions'
-      pool:
-        name: $(pool_name)
       project_title: $(project_title)
       environment: 'PA Azure'
       azure_service_connection: 'igor-demjanov-proactive-azure'
