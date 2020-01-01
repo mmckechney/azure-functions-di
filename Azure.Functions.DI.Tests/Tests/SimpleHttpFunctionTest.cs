@@ -40,7 +40,7 @@ namespace Azure.Functions.DI.Tests
         }
 
         [TestMethod]
-        public async Task TestBadRequestResponse()
+        public async Task SimpleHttpFunctionBadRequestTest()
         {
             // Mock http request with empty body and no query params
             mockRequest = mockManager.CreateMockRequest(null);
@@ -52,7 +52,7 @@ namespace Azure.Functions.DI.Tests
         }
 
         [TestMethod]
-        public async Task TestResponseWithBody()
+        public async Task SimpleHttpFunctionWithBodyTest()
         {
             // Mock http request with body and empty query params
             mockRequest = mockManager.CreateMockRequest(person);
@@ -66,7 +66,7 @@ namespace Azure.Functions.DI.Tests
         }
 
         [TestMethod]
-        public async Task TestResponseQueryParam()
+        public async Task SimpleHttpFunctionWithQueryParamTest()
         {
             // Mock http request with empty body and query params
             mockRequest = mockManager.CreateMockRequest(null);

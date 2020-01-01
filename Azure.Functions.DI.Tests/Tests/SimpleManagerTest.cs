@@ -19,7 +19,7 @@ namespace Azure.Functions.DI.Tests
         }
 
         [TestMethod]
-        public void ToUpperCaseTest()
+        public void SimpleManagerToUpperCaseTest()
         {
             string name = "Ivy";
             string nameUpperCase = "IVY";
