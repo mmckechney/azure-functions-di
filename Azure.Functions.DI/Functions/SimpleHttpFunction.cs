@@ -20,9 +20,9 @@ namespace Azure.Functions.DI
             _simpleManager = simpleManager;
         }
 
-        [FunctionName("SimpleHttpFunction")]
+        [FunctionName(nameof(SimpleHttpFunction))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "simplehttpfunction")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "simplehttpfunction")] HttpRequest req,
             ILogger log)
         {
             try
