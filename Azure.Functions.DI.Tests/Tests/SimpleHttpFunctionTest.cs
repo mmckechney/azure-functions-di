@@ -25,9 +25,10 @@ namespace Azure.Functions.DI.Tests
         private ISimpleManager simpleManager;
         private Person person;
         private Mock<HttpRequest> mockRequest;
+        private Mock<ILogger> log;
         private Dictionary<string, StringValues> mockRequestParam;
         private SimpleHttpFunction simpleHttpFunction;
-
+        
         [TestInitialize]
         public void Initialize()
         {
@@ -37,16 +38,16 @@ namespace Azure.Functions.DI.Tests
             mockRequestParam = new Dictionary<string, StringValues>();
             simpleHttpFunction = new SimpleHttpFunction(simpleManager);
             person = new Person { Name = "Ivy" };
+            log = new Mock<ILogger>();
         }
 
         [TestMethod]
         public async Task SimpleHttpFunctionBadRequestTest()
         {
-            // Mock http request with empty body and no query params
-            mockRequest = mockManager.CreateMockRequest(null);
-            mockRequest.Setup(x => x.Query).Returns(new QueryCollection(mockRequestParam));
-
-            var response = await simpleHttpFunction.Run(mockRequest.Object, new Mock<ILogger>().Object);
+            // Mock http request with empty body and empty query params
+            mockRequest = mockManager.CreateMockRequest(mockRequestParam, null);
+            
+            var response = await simpleHttpFunction.Run(mockRequest.Object, log.Object);
             
             Assert.IsInstanceOfType(response, typeof(BadRequestObjectResult));
         }
@@ -55,10 +56,9 @@ namespace Azure.Functions.DI.Tests
         public async Task SimpleHttpFunctionWithBodyTest()
         {
             // Mock http request with body and empty query params
-            mockRequest = mockManager.CreateMockRequest(person);
-            mockRequest.Setup(x => x.Query).Returns(new QueryCollection(mockRequestParam));
+            mockRequest = mockManager.CreateMockRequest(mockRequestParam, person);
 
-            var response = await simpleHttpFunction.Run(mockRequest.Object, new Mock<ILogger>().Object);
+            var response = await simpleHttpFunction.Run(mockRequest.Object, log.Object);
             var responsevalue = ((OkObjectResult)response).Value as string;
 
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
@@ -69,11 +69,10 @@ namespace Azure.Functions.DI.Tests
         public async Task SimpleHttpFunctionWithQueryParamTest()
         {
             // Mock http request with empty body and query params
-            mockRequest = mockManager.CreateMockRequest(null);
             mockRequestParam.Add("name", person.Name);
-            mockRequest.Setup(x => x.Query).Returns(new QueryCollection(mockRequestParam));
-
-            var response = await simpleHttpFunction.Run(mockRequest.Object, new Mock<ILogger>().Object);
+            mockRequest = mockManager.CreateMockRequest(mockRequestParam, null);
+            
+            var response = await simpleHttpFunction.Run(mockRequest.Object, log.Object);
             var responsevalue = ((OkObjectResult)response).Value as string;
 
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
